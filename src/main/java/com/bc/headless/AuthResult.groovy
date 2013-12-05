@@ -1,4 +1,4 @@
-package com.mentat.headless
+package com.bc.headless
 
 class AuthResult
 {

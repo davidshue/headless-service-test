@@ -1,4 +1,4 @@
-package com.mentat.headless
+package com.bc.headless
 
 import static groovyx.net.http.ContentType.*
 import static groovyx.net.http.Method.*
@@ -23,19 +23,19 @@ import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(['classpath:com/mentat/headless/test-context.xml'])
+@ContextConfiguration(['classpath:com/bc/headless/test-context.xml'])
 class HeadlessTestBase
 {
 	@Value('${login.uri}')
-	private String loginUri
+	String loginUri
 	
 	@Value('${base.url}')
-	protected String baseUrl
+	String baseUrl
 	
 	@Value('${base.url.secure}')
-	protected String secureBaseUrl
+	String secureBaseUrl
 	
-	protected Scheme secureScheme
+	private Scheme secureScheme
 	
 	@PostConstruct
 	void afterInit()
