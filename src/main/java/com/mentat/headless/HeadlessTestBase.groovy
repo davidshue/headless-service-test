@@ -23,10 +23,11 @@ import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(['classpath:com/bc/intl/selenium/headless-test-context.xml'])
+@ContextConfiguration(['classpath:com/mentat/headless/test-context.xml'])
 class HeadlessTestBase
 {
-	private static final LOGIN_SERVICE_URI = "/ws/external/login/v1"
+	@Value('${login.uri}')
+	private String loginUri
 	
 	@Value('${base.url}')
 	protected String baseUrl
@@ -76,7 +77,7 @@ class HeadlessTestBase
 		inputBody['_rememberMe'] = 'true'
 
 		secureBuilder().request(POST) {
-			uri.path = LOGIN_SERVICE_URI
+			uri.path = loginUri
 			send URLENC, inputBody
 			
 			response.success = {res ->
