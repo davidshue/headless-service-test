@@ -119,6 +119,17 @@ class HeadlessTestBase
 	private Map _post(HTTPBuilder http, String path, Map<String, String> inputBody, AuthResult authResult)
 	{
 		def result = [:]
+		def postClosure = 
+		{ res ->
+			result['code'] = res.statusLine.statusCode as int
+			result['contentType'] =  res.entity.contentType?.value
+			StringWriter writer = new StringWriter()
+			IOUtils.copy(res.entity.content, writer, Charset.forName('UTF-8'))
+			result['body'] = writer.toString()
+		}
+
+
+	
 		if (!inputBody)
 		{
 			inputBody = [:]
@@ -136,9 +147,9 @@ class HeadlessTestBase
 			}
 			send URLENC, inputBody
 			
-			response.success = postClosure(result)
+			response.success = postClosure
 			
-			response.failure = postClosure(result)
+			response.failure = postClosure
 		}
 		
 		return result
@@ -157,6 +168,13 @@ class HeadlessTestBase
 	private Map _get(HTTPBuilder http, String path, Map<String, String> inputBody, AuthResult authResult)
 	{
 		def result = [:]
+		def getClosure = 
+		{ res, reader ->
+			result['code'] = res.statusLine.statusCode as int
+			result['contentType'] =  res.entity.contentType?.value
+			result['body'] = reader.text
+		}
+		
 		if (!inputBody)
 		{
 			inputBody = [:]
@@ -178,30 +196,12 @@ class HeadlessTestBase
 			}
 			headers['Accept'] = 'text/xml'
 			
-			response.success = getClosure(result)
+			response.success = getClosure
 			
-			response.failure = getClosure(result)
+			response.failure = getClosure
 		}
 		
 		return result
-	}
-	
-	def postClosure(result) {
-		{ res ->
-			result['code'] = res.statusLine.statusCode as int
-			result['contentType'] =  res.entity.contentType?.value
-			StringWriter writer = new StringWriter()
-			IOUtils.copy(res.entity.content, writer, Charset.forName('UTF-8'))
-			result['body'] = writer.toString()
-		}
-	}
-	
-	def getClosure(result) {
-		{ res, reader ->
-				result['code'] = res.statusLine.statusCode as int
-				result['contentType'] =  res.entity.contentType?.value
-				result['body'] = reader.text
-		}
 	}
 
 }
