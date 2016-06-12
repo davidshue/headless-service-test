@@ -1,0 +1,4 @@
+headless:
+  url:
+    nonsecure: http://geo.groupkt.com/ip/6.131.144.10/json
+    secure: https://google.com
